@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +17,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     private FloatingActionButton addBtn;
-    private List<Note> noteData;
+    private NoteData noteData;
     private DBManager dbManager;
     private MyAdapter adapter;
     private ListView listView;
@@ -35,12 +37,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbManager=new DBManager(this);
-        noteData=new ArrayList<Note>();
+        noteData=new NoteData(this);
+
 
         listView= (ListView) findViewById(R.id.list);
         addBtn = (FloatingActionButton) findViewById(R.id.text);
         addBtn.setOnClickListener(this);
+
 
     }
 
@@ -50,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.text:
                 startActivity(i);
+                Log.d("Main","----------------------to EditNote");
         }
 
     }
@@ -58,23 +62,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         readFromDB();
+        Log.d("Main","===============================333");
     }
+
     public void readFromDB() {
+        noteData.refreshNoteData();
 //        cursor = dbReader.query(noteDBOpenHelper.TABLE_NAME, null, null, null, null,
 //                null, null);
-        adapter = new MyAdapter(this,noteData);
+        adapter = new MyAdapter(this,noteData.getNoteDataList());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                cursor.moveToPosition(i);
                 Intent intent = new Intent(MainActivity.this, EditNote.class);
-//                intent.putExtra(NoteDBOpenHelper.ID,
-//                        cursor.getInt(cursor.getColumnIndex(NoteDBOpenHelper.ID)));
-//                intent.putExtra(NoteDBOpenHelper.TITLE, cursor.getString(cursor
-//                        .getColumnIndex(NoteDBOpenHelper.TITLE)));
-//                intent.putExtra(NoteDBOpenHelper.CONTENT, cursor.getString(cursor
-//                        .getColumnIndex(NoteDBOpenHelper.CONTENT)));
+                intent.putExtra(NoteDBOpenHelper.ID,
+                        noteData.getNoteDataList().get(i).getId());
+                intent.putExtra(NoteDBOpenHelper.TITLE, noteData.getNoteDataList().get(i).getTitle());
+                intent.putExtra(NoteDBOpenHelper.CONTENT, noteData.getNoteDataList().get(i).getContent());
 //                intent.putExtra(NoteDBOpenHelper.TIME, cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.TIME)));
                 startActivity(intent);
             }
@@ -82,7 +86,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            //    cursor.moveToPosition(i);
                 new MaterialDialog.Builder(MainActivity.this)
                         .content("Are you sure to delete？")
                         .positiveText("delete")
@@ -90,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                dbManager.deleteNote(noteData.get(i).getId());
+                                dbManager.deleteNote(????);
                             }
                         }).show();
                 return true;

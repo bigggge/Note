@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,9 +39,19 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         saveBtn= (FloatingActionButton) findViewById(R.id.save);
         saveBtn.setOnClickListener(this);
 
-        titleEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.TITLE));
-        contentEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.CONTENT));
-    }
+//        noteID = intent.getIntExtra("id", -1);
+//        if(noteID != -1){
+//            fillNoteData(noteID);
+//        }
+//
+//        titleEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.TITLE));
+//        contentEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.CONTENT));
+//    }
+//    private void fillNoteData(int id){
+//        Note note = dbManager.readData(id);
+//        titleEt.setText(note.getTitle());
+//        contentEt.setText(note.getContent());
+   }
 
 
     @Override
@@ -50,9 +61,10 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         String time=getTime();
         if (noteID == -1) {
             dbManager.addToDB(title,content,time);
+
             finish();
         } else {
-            dbManager.updateNote(noteData.get().getId(), title,content,time);
+            dbManager.updateNote(noteID, title,content,time);
             finish();
         }
     }

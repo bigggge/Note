@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public MyAdapter(Context context,List<Note> notes){
         viewHolder.tvTitle.setText(notes.get(position).getTitle());
         viewHolder.tvContent.setText(notes.get(position).getContent());
         viewHolder.tvTime.setText(notes.get(position).getTime());
+        Log.d("Adapter","--------------------------Adapter");
         return convertView;
     }
 

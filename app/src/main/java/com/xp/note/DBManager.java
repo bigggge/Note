@@ -68,12 +68,22 @@ public class DBManager {
             cv.put(NoteDBOpenHelper.TITLE,title);
             cv.put(NoteDBOpenHelper.CONTENT, content);
             cv.put(NoteDBOpenHelper.TIME, time);
-            dbWriter.update(NoteDBOpenHelper.TABLE_NAME, cv, "ID = ?", new String[]{noteID +""});
+            dbWriter.update(NoteDBOpenHelper.TABLE_NAME, cv, "_id = ?", new String[]{noteID +""});
         }
         //  删除数据
         public void deleteNote(int noteID){
-            dbWriter.delete("Note", "ID = ?", new String[]{noteID +""});
+            dbWriter.delete(NoteDBOpenHelper.TABLE_NAME, "_id = ?", new String[]{noteID +""});
         }
+      // 根据id查询数据
+    public Note readData(int noteID){
+        Cursor cursor = dbReader.rawQuery("SELECT * FROM note WHERE _id = ?", new String[]{noteID+""});
+        cursor.moveToFirst();
+        Note note = new Note();
+        note.setId(cursor.getInt(cursor.getColumnIndex(NoteDBOpenHelper.ID)));
+        note.setTitle(cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.TITLE)));
+        note.setContent(cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.CONTENT)));
+        return note;
+    }
     }
 
 

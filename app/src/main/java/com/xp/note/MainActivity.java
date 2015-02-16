@@ -62,7 +62,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         readFromDB();
-        Log.d("Main","===============================333");
     }
 
     public void readFromDB() {
@@ -75,10 +74,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, EditNote.class);
-                intent.putExtra(NoteDBOpenHelper.ID,
-                        noteData.getNoteDataList().get(i).getId());
-                intent.putExtra(NoteDBOpenHelper.TITLE, noteData.getNoteDataList().get(i).getTitle());
-                intent.putExtra(NoteDBOpenHelper.CONTENT, noteData.getNoteDataList().get(i).getContent());
+//                intent.putExtra(NoteDBOpenHelper.ID,
+//                        noteData.getNoteDataList().get(i).getId());
+//                intent.putExtra(NoteDBOpenHelper.TITLE, noteData.getNoteDataList().get(i).getTitle());
+//                intent.putExtra(NoteDBOpenHelper.CONTENT, noteData.getNoteDataList().get(i).getContent());
 //                intent.putExtra(NoteDBOpenHelper.TIME, cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.TIME)));
                 startActivity(intent);
             }

@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:drawableLeft">@color/material_blue_grey_800</item>
+        <item name="android:actionBarItemBackground">@color/button_material_dark</item>
+    </style>
+    <style name="Theme.NoteApp" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#ff12b4d4</item>
+        <item name="colorPrimaryDark">#ffff1100</item>
+        <item name="colorAccent">#ff12b4d4</item>
+
+    </style>
+
+</resources>

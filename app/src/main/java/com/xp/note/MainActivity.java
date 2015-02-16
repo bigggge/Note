@@ -1,5 +1,6 @@
 package com.xp.note;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private DBManager dbManager;
     private MyAdapter adapter;
     private ListView listView;
+    private Context context;
+
 
     long waitTime = 2000;
     long touchTime = 0;
@@ -53,6 +57,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.text:
                 startActivity(i);
+                finish();
                 Log.d("Main","----------------------to EditNote");
         }
 
@@ -73,26 +78,37 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                MyAdapter.ViewHolder viewHolder= (MyAdapter.ViewHolder)view.getTag();
+                Log.d("Main","-----------------------view.gettag");
+                String noteId = viewHolder.tvId.getText().toString().trim();
                 Intent intent = new Intent(MainActivity.this, EditNote.class);
+                intent.putExtra("id" , Integer.parseInt(noteId));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
 //                intent.putExtra(NoteDBOpenHelper.ID,
 //                        noteData.getNoteDataList().get(i).getId());
 //                intent.putExtra(NoteDBOpenHelper.TITLE, noteData.getNoteDataList().get(i).getTitle());
 //                intent.putExtra(NoteDBOpenHelper.CONTENT, noteData.getNoteDataList().get(i).getContent());
 //                intent.putExtra(NoteDBOpenHelper.TIME, cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.TIME)));
-                startActivity(intent);
+
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                MyAdapter.ViewHolder viewHolder
+                        = (MyAdapter.ViewHolder)view.getTag();
+                String noteId = viewHolder.tvId.getText().toString().trim();
+                final int id=Integer.parseInt(noteId);
                 new MaterialDialog.Builder(MainActivity.this)
-                        .content("Are you sure to delete？")
-                        .positiveText("delete")
-                        .negativeText("cancel")
+                        .content(R.string.areyousure)
+                        .positiveText(R.string.delete)
+                        .negativeText(R.string.cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                                dbManager.deleteNote(????);
+                            //    dbManager.deleteNote();
                             }
                         }).show();
                 return true;
@@ -110,10 +126,24 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.action_about:
                 new MaterialDialog.Builder(this)
-                        .title("About")
-                        .content("from bigggge")
-                        .positiveText("close")
+                        .title(R.string.about)
+                        .content(R.string.content)
+                        .positiveText(R.string.close)
                         .show();
+                break;
+            case R.id.action_clean:
+                new MaterialDialog.Builder(MainActivity.this)
+                        .content(R.string.areyousure)
+                        .positiveText(R.string.clean)
+                        .negativeText(R.string.cancel)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                dbManager.getDbReadable().execSQL("TRUNCATE TABLE");
+
+                                       }
+                        }).show();
+
                 break;
             default:
                 break;
@@ -131,6 +161,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             finish();
         }
     }
+    //清除数据
 
+    public static void cleanDatabases(Context context) {
+        deleteFilesByDirectory(new File("/data/data/"
+                + context.getPackageName() + "/databases"));
+    }
+
+    private static void deleteFilesByDirectory(File directory) {
+        if (directory != null && directory.exists() && directory.isDirectory()) {
+            for (File item : directory.listFiles()) {
+                item.delete();
+            }
+        }
+    }
 
 }

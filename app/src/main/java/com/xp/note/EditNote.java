@@ -2,6 +2,7 @@ package com.xp.note;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +40,10 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         saveBtn= (FloatingActionButton) findViewById(R.id.save);
         saveBtn.setOnClickListener(this);
 
-//        noteID = intent.getIntExtra("id", -1);
+        noteID = getIntent().getIntExtra("id", -1);
+        if (noteID!=-1) {
+            showNoteData(noteID);
+        }
 //        if(noteID != -1){
 //            fillNoteData(noteID);
 //        }
@@ -52,7 +56,12 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
 //        titleEt.setText(note.getTitle());
 //        contentEt.setText(note.getContent());
    }
-
+    //显示更新的数据
+    private void showNoteData(int id){
+        Note note = dbManager.readData(id);
+        titleEt.setText(note.getTitle());
+        contentEt.setText(note.getContent());
+    }
 
     @Override
     public void onClick(View view) {
@@ -61,12 +70,11 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         String time=getTime();
         if (noteID == -1) {
             dbManager.addToDB(title,content,time);
-
-            finish();
         } else {
             dbManager.updateNote(noteID, title,content,time);
-            finish();
         }
+        Intent i=new Intent(this,MainActivity.class);
+        startActivity(i);
     }
 //    public void addToDB(){  //添加到数据库
 //        ContentValues cv = new ContentValues();
@@ -101,5 +109,16 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //按返回键时
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.finish();
+    }
+
 
 }

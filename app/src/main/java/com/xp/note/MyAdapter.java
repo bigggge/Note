@@ -52,6 +52,8 @@ public MyAdapter(Context context,List<Note> notes){
             convertView
                     = LayoutInflater.from(context).inflate(R.layout.notes_row, null);
             viewHolder = new ViewHolder();
+            viewHolder.tvId
+                    = (TextView) convertView.findViewById(R.id.note_id);
             viewHolder.tvTitle
                     = (TextView) convertView.findViewById(R.id.note_title);
             viewHolder.tvContent
@@ -59,9 +61,12 @@ public MyAdapter(Context context,List<Note> notes){
             viewHolder.tvTime
                     = (TextView) convertView.findViewById(R.id.note_time);
             convertView.setTag(viewHolder);
+            Log.d("adapter","--------------------------convertview.settag");
 
         }else{
             viewHolder= (ViewHolder) convertView.getTag();
+            Log.d("adapter","--------------------------convertview.gettag");
+
         }
 //        viewHolder.tvTitle.setText(notesList.get(position).getTitle());
 //        viewHolder.tvContent.setText(notesList.get(position).getContent());
@@ -69,14 +74,16 @@ public MyAdapter(Context context,List<Note> notes){
 //        String title= cursor.getString(cursor.getColumnIndex("title"));
 //        String content = cursor.getString(cursor.getColumnIndex("content"));
 //        String time = cursor.getString(cursor.getColumnIndex("time"));
+        viewHolder.tvId.setText(notes.get(position).getId() + "");
         viewHolder.tvTitle.setText(notes.get(position).getTitle());
         viewHolder.tvContent.setText(notes.get(position).getContent());
         viewHolder.tvTime.setText(notes.get(position).getTime());
-        Log.d("Adapter","--------------------------Adapter");
+        Log.d("adapter","--------------------------Adapter");
         return convertView;
     }
 
         public static class ViewHolder{
+            public TextView tvId;
             public TextView tvTitle;
             public TextView tvContent;
             public TextView tvTime;

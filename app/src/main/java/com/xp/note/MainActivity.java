@@ -96,11 +96,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MyAdapter.ViewHolder viewHolder
-                        = (MyAdapter.ViewHolder)view.getTag();
-                String noteId = viewHolder.tvId.getText().toString().trim();
-                final int id=Integer.parseInt(noteId);
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+//                MyAdapter.ViewHolder viewHolder
+//                        = (MyAdapter.ViewHolder)view.getTag();
+//                String noteId = viewHolder.tvId.getText().toString().trim();
+//                final int id=Integer.parseInt(noteId);
+                final Note note = ((MyAdapter)adapterView.getAdapter()).getItem(i);
+                if(note == null){
+                    return true;
+                }
+                final int id = note.getId();
                 new MaterialDialog.Builder(MainActivity.this)
                         .content(R.string.areyousure)
                         .positiveText(R.string.delete)
@@ -108,7 +113,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
-                            //    dbManager.deleteNote();
+//                                dbManager.deleteNote(id);
+                                DBManager.getInstance(MainActivity.this).deleteNote(id);
+                                adapter.removeItem(i);
                             }
                         }).show();
                 return true;

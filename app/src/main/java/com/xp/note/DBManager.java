@@ -17,12 +17,21 @@ public class DBManager {
         private SQLiteDatabase dbReader;
         private SQLiteDatabase dbWriter;
 
+    private static DBManager instance;
+
         public DBManager(Context context) {
             this.context = context;
             databaseOpenHelper = new NoteDBOpenHelper(context);
         // 创建and/or打开一个数据库
             dbReader = databaseOpenHelper.getReadableDatabase();
             dbWriter = databaseOpenHelper.getWritableDatabase();
+        }
+
+        public static synchronized DBManager getInstance(Context context){
+            if(instance == null){
+                instance = new DBManager(context);
+            }
+            return instance;
         }
 
         // 得到一个可读的数据库

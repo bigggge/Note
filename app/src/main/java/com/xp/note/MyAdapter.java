@@ -35,8 +35,13 @@ public MyAdapter(Context context,List<Note> notes){
 
     }
 
+    public void removeItem(int position){
+        notes.remove(position);
+        notifyDataSetChanged();
+    }
+
     @Override
-    public Object getItem(int position) {
+    public Note getItem(int position) {
         return notes.get(position);
     }
 

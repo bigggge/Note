@@ -71,8 +71,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void readFromDB() {
         noteData.refreshNoteData();
-//        cursor = dbReader.query(noteDBOpenHelper.TABLE_NAME, null, null, null, null,
-//                null, null);
         adapter = new MyAdapter(this,noteData.getNoteDataList());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,35 +84,38 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 intent.putExtra("id" , Integer.parseInt(noteId));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-//                intent.putExtra(NoteDBOpenHelper.ID,
-//                        noteData.getNoteDataList().get(i).getId());
-//                intent.putExtra(NoteDBOpenHelper.TITLE, noteData.getNoteDataList().get(i).getTitle());
-//                intent.putExtra(NoteDBOpenHelper.CONTENT, noteData.getNoteDataList().get(i).getContent());
-//                intent.putExtra(NoteDBOpenHelper.TIME, cursor.getString(cursor.getColumnIndex(NoteDBOpenHelper.TIME)));
-
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MyAdapter.ViewHolder viewHolder
-                        = (MyAdapter.ViewHolder)view.getTag();
-                String noteId = viewHolder.tvId.getText().toString().trim();
-                final int id=Integer.parseInt(noteId);
+            public boolean onItemLongClick(final AdapterView<?> adapterView, View view,final int i, long l) {
+                final Note note = ((MyAdapter)adapterView.getAdapter()).getItem(i);
+                                if(note == null){
+                                        return true;
+                                    }
+                                final int id = note.getId();
                 new MaterialDialog.Builder(MainActivity.this)
                         .content(R.string.areyousure)
                         .positiveText(R.string.delete)
                         .negativeText(R.string.cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                            //    dbManager.deleteNote();
-                            }
-                        }).show();
-                return true;
-            }
-        });
+                                      @Override
+                                      public void onPositive(MaterialDialog dialog) {
+                                         DBManager.getInstance(MainActivity.this).deleteNote(id);
+                                         adapter.removeItem(i);
+                                      }
+                                  }
+
+                        ).show();
+
+                            return true;
+                        }
+            });
     }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);

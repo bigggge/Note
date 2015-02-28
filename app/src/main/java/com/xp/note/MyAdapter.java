@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,13 +23,22 @@ import java.util.List;
 public class MyAdapter extends BaseAdapter {
     private Context context;
     private List<Note> notes;
+    public boolean isSelected[];
 
 
 public MyAdapter(Context context,List<Note> notes){
     this.context=context;
     this.notes=notes;
+    //初始化
+    isSelected = new boolean[notes.size()];
+    for(int i = 0; i < notes.size(); i++){
+        isSelected[i] = false;
+    }
 }
-
+    public void removeItem(int position){
+                notes.remove(position);
+                notifyDataSetChanged();
+            }
     @Override
     public int getCount() {
         return notes.size();
@@ -36,7 +47,7 @@ public MyAdapter(Context context,List<Note> notes){
     }
 
     @Override
-    public Object getItem(int position) {
+    public Note getItem(int position) {
         return notes.get(position);
     }
 
@@ -54,6 +65,8 @@ public MyAdapter(Context context,List<Note> notes){
             viewHolder = new ViewHolder();
             viewHolder.tvId
                     = (TextView) convertView.findViewById(R.id.note_id);
+//            viewHolder.cb
+//                    = (CheckBox)convertView.findViewById(R.id.note_check);
             viewHolder.tvTitle
                     = (TextView) convertView.findViewById(R.id.note_title);
             viewHolder.tvContent
@@ -78,11 +91,20 @@ public MyAdapter(Context context,List<Note> notes){
         viewHolder.tvTitle.setText(notes.get(position).getTitle());
         viewHolder.tvContent.setText(notes.get(position).getContent());
         viewHolder.tvTime.setText(notes.get(position).getTime());
-        Log.d("adapter","--------------------------Adapter");
+//        viewHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                isSelected[position]=b;
+//            }
+//        });
+//        viewHolder.cb.setChecked(isSelected[position]);
+//        Log.d("isselected","--------------------------convertview.isselected");
+
         return convertView;
     }
 
         public static class ViewHolder{
+//            public CheckBox cb;
             public TextView tvId;
             public TextView tvTitle;
             public TextView tvContent;

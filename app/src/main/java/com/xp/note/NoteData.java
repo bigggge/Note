@@ -8,9 +8,6 @@ import java.util.List;
 
 import android.content.Context;
 
-
-
-
     //保存日记的数据
 public class NoteData {
     //保存日记数据的集合
@@ -26,7 +23,6 @@ public class NoteData {
     public List<Note> getNoteDataList() {
         return noteDataList;
     }
-
 
     // 重新从数据库中读数据
 

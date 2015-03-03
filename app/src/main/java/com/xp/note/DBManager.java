@@ -85,11 +85,6 @@ public class DBManager {
     public void deleteNote(int noteID) {
         dbWriter.delete(NoteDBOpenHelper.TABLE_NAME, "_id = ?", new String[]{noteID + ""});
     }
-
-    public void deleteAllNote(int noteID) {
-        dbWriter.delete(NoteDBOpenHelper.TABLE_NAME, "_id < ?", new String[]{noteID + "10000"});
-    }
-
     // 根据id查询数据
     public Note readData(int noteID) {
         Cursor cursor = dbReader.rawQuery("SELECT * FROM note WHERE _id = ?", new String[]{noteID + ""});

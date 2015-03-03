@@ -25,7 +25,6 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
     private EditText titleEt;
     private EditText contentEt;
     private FloatingActionButton saveBtn;
-    private List<Note> noteData;
     private int noteID = -1;
     private DBManager dbManager;
 
@@ -44,17 +43,6 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         if (noteID!=-1) {
             showNoteData(noteID);
         }
-//        if(noteID != -1){
-//            fillNoteData(noteID);
-//        }
-//
-//        titleEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.TITLE));
-//        contentEt.setText(getIntent().getStringExtra(NoteDBOpenHelper.CONTENT));
-//    }
-//    private void fillNoteData(int id){
-//        Note note = dbManager.readData(id);
-//        titleEt.setText(note.getTitle());
-//        contentEt.setText(note.getContent());
    }
     //显示更新的数据
     private void showNoteData(int id){
@@ -73,17 +61,12 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         } else {
             dbManager.updateNote(noteID, title,content,time);
         }
-        Intent i=new Intent(this,MainActivity.class);
+        Intent i=new Intent(EditNote.this,MainActivity.class);
         startActivity(i);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.finish();
     }
-//    public void addToDB(){  //添加到数据库
-//        ContentValues cv = new ContentValues();
-//        cv.put(NoteDBOpenHelper.CONTENT, contentEt.getText().toString());
-//        cv.put(NoteDBOpenHelper.TITLE,titleEt.getText().toString());
-//        cv.put(NoteDBOpenHelper.TIME, getTime());
-//
-//        databaseWriter.insert(NoteDBOpenHelper.TABLE_NAME, null, cv);
-//    }
+
     private String getTime() {
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm E");
         Date curDate = new Date();
@@ -113,8 +96,7 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
     //按返回键时
     @Override
     public void onBackPressed() {
-
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(EditNote.this, MainActivity.class);
         startActivity(intent);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.finish();

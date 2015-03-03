@@ -35,11 +35,9 @@
         fab:fab_colorNormal="@color/white"
         fab:fab_colorPressed="@color/white_pressed"
         android:src="@drawable/ic_action_save"
-        android:layout_alignBottom="@+id/note_content"
+        android:layout_margin="15dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="21dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="21dp" />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

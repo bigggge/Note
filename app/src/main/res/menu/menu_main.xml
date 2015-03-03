@@ -7,9 +7,9 @@
         android:orderInCategory="100"
         app:showAsAction="never"
         android:title="清除所有数据"/>
-
-
-
+    <item android:id="@+id/action_color"
+        app:showAsAction="never"
+        android:title="主题选择"/>
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"

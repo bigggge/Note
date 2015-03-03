@@ -23,18 +23,15 @@ import java.util.List;
 public class MyAdapter extends BaseAdapter {
     private Context context;
     private List<Note> notes;
-    public boolean isSelected[];
-
 
 public MyAdapter(Context context,List<Note> notes){
     this.context=context;
     this.notes=notes;
-    //初始化
-    isSelected = new boolean[notes.size()];
-    for(int i = 0; i < notes.size(); i++){
-        isSelected[i] = false;
-    }
 }
+    public void removeAllItem(){
+        notes.clear();
+        notifyDataSetChanged();
+    }
     public void removeItem(int position){
                 notes.remove(position);
                 notifyDataSetChanged();
@@ -42,8 +39,6 @@ public MyAdapter(Context context,List<Note> notes){
     @Override
     public int getCount() {
         return notes.size();
-
-
     }
 
     @Override
@@ -65,8 +60,6 @@ public MyAdapter(Context context,List<Note> notes){
             viewHolder = new ViewHolder();
             viewHolder.tvId
                     = (TextView) convertView.findViewById(R.id.note_id);
-//            viewHolder.cb
-//                    = (CheckBox)convertView.findViewById(R.id.note_check);
             viewHolder.tvTitle
                     = (TextView) convertView.findViewById(R.id.note_title);
             viewHolder.tvContent
@@ -74,7 +67,6 @@ public MyAdapter(Context context,List<Note> notes){
             viewHolder.tvTime
                     = (TextView) convertView.findViewById(R.id.note_time);
             convertView.setTag(viewHolder);
-            Log.d("adapter","--------------------------convertview.settag");
 
         }else{
             viewHolder= (ViewHolder) convertView.getTag();
@@ -91,24 +83,13 @@ public MyAdapter(Context context,List<Note> notes){
         viewHolder.tvTitle.setText(notes.get(position).getTitle());
         viewHolder.tvContent.setText(notes.get(position).getContent());
         viewHolder.tvTime.setText(notes.get(position).getTime());
-//        viewHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                isSelected[position]=b;
-//            }
-//        });
-//        viewHolder.cb.setChecked(isSelected[position]);
-//        Log.d("isselected","--------------------------convertview.isselected");
-
         return convertView;
     }
 
         public static class ViewHolder{
-//            public CheckBox cb;
             public TextView tvId;
             public TextView tvTitle;
             public TextView tvContent;
             public TextView tvTime;
         }
-
     }

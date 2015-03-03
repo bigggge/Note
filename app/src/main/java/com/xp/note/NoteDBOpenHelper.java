@@ -17,15 +17,9 @@ public class NoteDBOpenHelper extends SQLiteOpenHelper {
     public static final String TIME="time";
     public static final String ID="_id";
 
-
-
-
     public NoteDBOpenHelper(Context context) {
         super(context, TABLE_NAME, null, VERSION);
     }
-
-
-
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

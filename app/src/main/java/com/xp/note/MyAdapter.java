@@ -1,18 +1,11 @@
 package com.xp.note;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,18 +17,22 @@ public class MyAdapter extends BaseAdapter {
     private Context context;
     private List<Note> notes;
 
-public MyAdapter(Context context,List<Note> notes){
-    this.context=context;
-    this.notes=notes;
-}
-    public void removeAllItem(){
+    public MyAdapter(Context context, List<Note> notes) {
+        this.context = context;
+        this.notes = notes;
+    }
+
+    public void removeAllItem() {
         notes.clear();
         notifyDataSetChanged();
     }
-    public void removeItem(int position){
-                notes.remove(position);
-                notifyDataSetChanged();
-            }
+
+    //从List移除对象
+    public void removeItem(int position) {
+        notes.remove(position);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return notes.size();
@@ -68,28 +65,20 @@ public MyAdapter(Context context,List<Note> notes){
                     = (TextView) convertView.findViewById(R.id.note_time);
             convertView.setTag(viewHolder);
 
-        }else{
-            viewHolder= (ViewHolder) convertView.getTag();
-            Log.d("adapter","--------------------------convertview.gettag");
-
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-//        viewHolder.tvTitle.setText(notesList.get(position).getTitle());
-//        viewHolder.tvContent.setText(notesList.get(position).getContent());
-//        viewHolder.tvTime.setText(notesList.get(position).getTime());
-//        String title= cursor.getString(cursor.getColumnIndex("title"));
-//        String content = cursor.getString(cursor.getColumnIndex("content"));
-//        String time = cursor.getString(cursor.getColumnIndex("time"));
         viewHolder.tvId.setText(notes.get(position).getId() + "");
         viewHolder.tvTitle.setText(notes.get(position).getTitle());
         viewHolder.tvContent.setText(notes.get(position).getContent());
         viewHolder.tvTime.setText(notes.get(position).getTime());
         return convertView;
     }
-
-        public static class ViewHolder{
-            public TextView tvId;
-            public TextView tvTitle;
-            public TextView tvContent;
-            public TextView tvTime;
-        }
+    //ViewHolder内部类
+    public static class ViewHolder {
+        public TextView tvId;
+        public TextView tvTitle;
+        public TextView tvContent;
+        public TextView tvTime;
     }
+}

@@ -1,11 +1,11 @@
 package com.xp.note;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.List;
 
 /**
  * Created by XP on 2015/2/15.
@@ -26,24 +26,14 @@ public class DBManager {
         dbWriter = databaseOpenHelper.getWritableDatabase();
     }
 
+    //getInstance单例
     public static synchronized DBManager getInstance(Context context) {
         if (instance == null) {
             instance = new DBManager(context);
         }
         return instance;
     }
-
-    // 得到一个可读的数据库
-    public SQLiteDatabase getDbReadable() {
-        return dbReader;
-    }
-
-    // 得到一个可写的数据库
-    public SQLiteDatabase getDbWritable() {
-        return dbWriter;
-    }
-
-    //  添加到数据库
+    // 添加到数据库
     public void addToDB(String title, String content, String time) {
         //  组装数据
         ContentValues cv = new ContentValues();
@@ -53,7 +43,7 @@ public class DBManager {
         dbWriter.insert(NoteDBOpenHelper.TABLE_NAME, null, cv);
     }
 
-    //   读取数据
+    //  读取数据
     public void readFromDB(List<Note> noteList) {
         Cursor cursor = dbReader.query(NoteDBOpenHelper.TABLE_NAME, null, null, null, null, null, null);
         try {
@@ -85,6 +75,7 @@ public class DBManager {
     public void deleteNote(int noteID) {
         dbWriter.delete(NoteDBOpenHelper.TABLE_NAME, "_id = ?", new String[]{noteID + ""});
     }
+
     // 根据id查询数据
     public Note readData(int noteID) {
         Cursor cursor = dbReader.rawQuery("SELECT * FROM note WHERE _id = ?", new String[]{noteID + ""});

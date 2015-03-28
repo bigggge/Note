@@ -1,31 +1,23 @@
 package com.xp.note;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.ThemeSingleton;
 import com.getbase.floatingactionbutton.FloatingActionButton;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -47,6 +39,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listView = (ListView) findViewById(R.id.list);
         addBtn = (FloatingActionButton) findViewById(R.id.text);
         addBtn.setOnClickListener(this);
+        setStatusBarColor();
+    }
+
+    //设置状态栏同色
+    public void setStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            // Translucent status bar
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        // 创建状态栏的管理实例
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // 激活状态栏设置
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(Color.parseColor("#ff6cb506"));
     }
 
     @Override
@@ -93,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
                 final int id = note.getId();
                 new MaterialDialog.Builder(MainActivity.this)
-                        .content(R.string.areyousure)
+                        .content(R.string.are_you_sure)
                         .positiveText(R.string.delete)
                         .negativeText(R.string.cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
@@ -133,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 break;
             case R.id.action_clean:
                 new MaterialDialog.Builder(MainActivity.this)
-                        .content(R.string.areyousure)
+                        .content(R.string.are_you_sure)
                         .positiveText(R.string.clean)
                         .negativeText(R.string.cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
@@ -146,35 +155,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         }).show();
 
                 break;
-            case R.id.action_color:
-                showCustomColorChooser();
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    static int selectedColorIndex = -1;
-
-    private void showCustomColorChooser() {
-        new ColorChooserDialog().show(this, selectedColorIndex, new ColorChooserDialog.Callback() {
-            @Override
-            public void onColorSelection(int index, int color, int darker) {
-                selectedColorIndex = index;
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-                ThemeSingleton.get().positiveColor = color;
-                ThemeSingleton.get().neutralColor = color;
-                ThemeSingleton.get().negativeColor = color;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getWindow().setStatusBarColor(darker);
-            }
-        });
-    }
-
     public void onBackPressed() {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - touchTime) >= waitTime) {
-            Toast.makeText(this, "再按一次,退出程序", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.exit, Toast.LENGTH_SHORT).show();
             touchTime = currentTime;
         } else {
             finish();

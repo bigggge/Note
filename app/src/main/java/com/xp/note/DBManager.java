@@ -11,7 +11,6 @@ import java.util.List;
  * Created by XP on 2015/2/15.
  */
 public class DBManager {
-
     private Context context;
     private NoteDBOpenHelper databaseOpenHelper;
     private SQLiteDatabase dbReader;
@@ -33,6 +32,7 @@ public class DBManager {
         }
         return instance;
     }
+
     // 添加到数据库
     public void addToDB(String title, String content, String time) {
         //  组装数据

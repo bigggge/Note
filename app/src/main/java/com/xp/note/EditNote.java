@@ -33,7 +33,6 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
     private FloatingActionButton saveBtn;
     private int noteID = -1;
     private DBManager dbManager;
-    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,29 +43,27 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         contentEt = (EditText) findViewById(R.id.note_content);
         saveBtn = (FloatingActionButton) findViewById(R.id.save);
         saveBtn.setOnClickListener(this);
-                                       //name，defaultValue
+        //name，defaultValue
         noteID = getIntent().getIntExtra("id", -1);
         if (noteID != -1) {
             showNoteData(noteID);
         }
-
         setStatusBarColor();
     }
+
     //设置状态栏同色
     public void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
-            // Translucent status bar
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        // 创建状态栏的管理实例
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        // 激活状态栏设置
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setTintColor(Color.parseColor("#ff6cb506"));
     }
+
     //显示更新的数据
     private void showNoteData(int id) {
         Note note = dbManager.readData(id);
@@ -94,6 +91,7 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.finish();
     }
+
     //得到时间
     private String getTime() {
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm E");
@@ -124,6 +122,7 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
         }
         return super.onOptionsItemSelected(item);
     }
+
     //按返回键时
     @Override
     public void onBackPressed() {

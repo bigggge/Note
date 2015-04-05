@@ -74,6 +74,7 @@ public class MyAdapter extends BaseAdapter {
         viewHolder.tvTime.setText(notes.get(position).getTime());
         return convertView;
     }
+
     //ViewHolder内部类
     public static class ViewHolder {
         public TextView tvId;

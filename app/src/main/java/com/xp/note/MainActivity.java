@@ -19,14 +19,16 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     private FloatingActionButton addBtn;
-    private NoteData noteData;
+    private DBManager dm;
+    private List<Note> noteDataList = new ArrayList<>();
     private MyAdapter adapter;
     private ListView listView;
-
-
     long waitTime = 2000;
     long touchTime = 0;
 
@@ -34,11 +36,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
 
-        noteData = new NoteData(this);
+    }
+    //初始化
+    private void init() {
+        dm = new DBManager(this);
+        dm.readFromDB(noteDataList);
         listView = (ListView) findViewById(R.id.list);
-        addBtn = (FloatingActionButton) findViewById(R.id.text);
+        addBtn = (FloatingActionButton) findViewById(R.id.add);
         addBtn.setOnClickListener(this);
+        adapter = new MyAdapter(this, noteDataList);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new NoteClickListener());
+        listView.setOnItemLongClickListener(new NoteLongClickListener());
         setStatusBarColor();
     }
 
@@ -62,64 +73,51 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View view) {
         Intent i = new Intent(this, EditNote.class);
         switch (view.getId()) {
-            case R.id.text:
+            case R.id.add:
                 startActivity(i);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        readFromDB();
+    private class NoteClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            MyAdapter.ViewHolder viewHolder = (MyAdapter.ViewHolder) view.getTag();
+            String noteId = viewHolder.tvId.getText().toString().trim();
+            Intent intent = new Intent(MainActivity.this, EditNote.class);
+            intent.putExtra("id", Integer.parseInt(noteId));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
-    public void readFromDB() {
-        noteData.refreshNoteData();
-        adapter = new MyAdapter(this, noteData.getNoteDataList());
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                MyAdapter.ViewHolder viewHolder = (MyAdapter.ViewHolder) view.getTag();
-                String noteId = viewHolder.tvId.getText().toString().trim();
-                Intent intent = new Intent(MainActivity.this, EditNote.class);
-                intent.putExtra("id", Integer.parseInt(noteId));
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int i, long l) {
-                final Note note = ((MyAdapter) adapterView.getAdapter()).getItem(i);
-                if (note == null) {
-                    return true;
-                }
-                final int id = note.getId();
-                new MaterialDialog.Builder(MainActivity.this)
-                        .content(R.string.are_you_sure)
-                        .positiveText(R.string.delete)
-                        .negativeText(R.string.cancel)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                                      @Override
-                                      public void onPositive(MaterialDialog dialog) {
-                                          DBManager.getInstance(MainActivity.this).deleteNote(id);
-                                          adapter.removeItem(i);
-                                      }
-                                  }
-
-                        ).show();
-
+    private class NoteLongClickListener implements AdapterView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int i, long l) {
+            final Note note = ((MyAdapter) adapterView.getAdapter()).getItem(i);
+            if (note == null) {
                 return true;
             }
-        });
-    }
+            final int id = note.getId();
+            new MaterialDialog.Builder(MainActivity.this)
+                    .content(R.string.are_you_sure)
+                    .positiveText(R.string.delete)
+                    .negativeText(R.string.cancel)
+                    .callback(new MaterialDialog.ButtonCallback() {
+                                  @Override
+                                  public void onPositive(MaterialDialog dialog) {
+                                      DBManager.getInstance(MainActivity.this).deleteNote(id);
+                                      adapter.removeItem(i);
+                                  }
+                              }
+                    ).show();
 
+            return true;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

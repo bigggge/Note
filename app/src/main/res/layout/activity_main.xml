@@ -33,17 +33,16 @@
         <!--android:layout_marginEnd="16dp">-->
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/text"
+            android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
+            fab:fab_colorNormal="@color/app_color"
             fab:fab_colorPressed="@color/white_pressed"
-            android:src="@drawable/ic_action_new"
+            android:src="@drawable/ic_add"
             android:layout_margin="15dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-
         <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
             <!--android:id="@+id/img"-->
             <!--android:layout_width="wrap_content"-->

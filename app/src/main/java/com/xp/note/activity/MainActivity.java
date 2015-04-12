@@ -43,8 +43,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-
     }
+
     //初始化
     private void init() {
         dm = new DBManager(this);
@@ -59,8 +59,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listView.setOnItemLongClickListener(new NoteLongClickListener());
         setStatusBarColor();
         updateView();
-
     }
+
     //空数据更新
     private void updateView() {
         if (noteDataList.isEmpty()) {
@@ -71,11 +71,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             emptyListTextView.setVisibility(View.GONE);
         }
     }
+
     //设置状态栏同色
     public void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
-            // Translucent status bar
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -87,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         tintManager.setTintColor(Color.parseColor("#ff6cb506"));
     }
 
+    //button单击事件
     @Override
     public void onClick(View view) {
         Intent i = new Intent(this, EditNoteActivity.class);
@@ -98,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
+    //listView单击事件
     private class NoteClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -112,6 +114,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
+    //listView长按事件
     private class NoteLongClickListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int i, long l) {
@@ -179,6 +182,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    //按返回键时
     public void onBackPressed() {
         long currentTime = System.currentTimeMillis();
         if ((currentTime - touchTime) >= waitTime) {

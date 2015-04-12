@@ -39,6 +39,11 @@ public class EditNoteActivity extends ActionBarActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_text);
+        init();
+    }
+
+    //初始化
+    private void init() {
         dbManager = new DBManager(this);
         titleEt = (EditText) findViewById(R.id.note_title);
         contentEt = (EditText) findViewById(R.id.note_content);

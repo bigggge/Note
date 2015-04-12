@@ -1,4 +1,4 @@
-package com.xp.note;
+package com.xp.note.model;
 
 /**
  * Created by XP on 2015/2/15.

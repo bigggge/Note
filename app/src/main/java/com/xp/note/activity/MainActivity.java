@@ -1,4 +1,4 @@
-package com.xp.note;
+package com.xp.note.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,11 +13,16 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.xp.note.R;
+import com.xp.note.adapter.MyAdapter;
+import com.xp.note.db.DBManager;
+import com.xp.note.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +34,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private List<Note> noteDataList = new ArrayList<>();
     private MyAdapter adapter;
     private ListView listView;
+    private TextView emptyListTextView;
     long waitTime = 2000;
     long touchTime = 0;
 
@@ -45,14 +51,26 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         dm.readFromDB(noteDataList);
         listView = (ListView) findViewById(R.id.list);
         addBtn = (FloatingActionButton) findViewById(R.id.add);
+        emptyListTextView = (TextView) findViewById(R.id.empty);
         addBtn.setOnClickListener(this);
         adapter = new MyAdapter(this, noteDataList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new NoteClickListener());
         listView.setOnItemLongClickListener(new NoteLongClickListener());
         setStatusBarColor();
-    }
+        updateView();
 
+    }
+    //空数据更新
+    private void updateView() {
+        if (noteDataList.isEmpty()) {
+            listView.setVisibility(View.GONE);
+            emptyListTextView.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+            emptyListTextView.setVisibility(View.GONE);
+        }
+    }
     //设置状态栏同色
     public void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -71,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Intent i = new Intent(this, EditNote.class);
+        Intent i = new Intent(this, EditNoteActivity.class);
         switch (view.getId()) {
             case R.id.add:
                 startActivity(i);
@@ -86,7 +104,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             MyAdapter.ViewHolder viewHolder = (MyAdapter.ViewHolder) view.getTag();
             String noteId = viewHolder.tvId.getText().toString().trim();
-            Intent intent = new Intent(MainActivity.this, EditNote.class);
+            Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
             intent.putExtra("id", Integer.parseInt(noteId));
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -111,6 +129,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                                   public void onPositive(MaterialDialog dialog) {
                                       DBManager.getInstance(MainActivity.this).deleteNote(id);
                                       adapter.removeItem(i);
+                                      updateView();
                                   }
                               }
                     ).show();
@@ -149,6 +168,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                                 for (int id = 0; id < 100; id++)
                                     DBManager.getInstance(MainActivity.this).deleteNote(id);
                                 adapter.removeAllItem();
+                                updateView();
                             }
                         }).show();
 

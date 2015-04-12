@@ -1,8 +1,7 @@
-package com.xp.note;
+package com.xp.note.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,11 +14,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.xp.note.R;
+import com.xp.note.db.DBManager;
+import com.xp.note.model.Note;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +28,7 @@ import java.util.Date;
 /**
  * Created by XP on 2015/2/15.
  */
-public class EditNote extends ActionBarActivity implements View.OnClickListener {
+public class EditNoteActivity extends ActionBarActivity implements View.OnClickListener {
     private EditText titleEt;
     private EditText contentEt;
     private FloatingActionButton saveBtn;
@@ -86,7 +87,7 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
             //更新
             dbManager.updateNote(noteID, title, content, time);
         }
-        Intent i = new Intent(EditNote.this, MainActivity.class);
+        Intent i = new Intent(EditNoteActivity.this, MainActivity.class);
         startActivity(i);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.finish();
@@ -126,7 +127,7 @@ public class EditNote extends ActionBarActivity implements View.OnClickListener 
     //按返回键时
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(EditNote.this, MainActivity.class);
+        Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
         startActivity(intent);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.finish();

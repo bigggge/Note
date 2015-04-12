@@ -1,9 +1,11 @@
-package com.xp.note;
+package com.xp.note.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.xp.note.model.Note;
 
 import java.util.List;
 
